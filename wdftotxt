@@ -1,0 +1,69 @@
+#!/bin/sh
+
+filter=false
+# Parse arguments
+while getopts ":f:h" opt; do
+	case $opt in
+		f)
+			filter=true
+			;;
+		h)
+			echo "usage: dftotxt [OPTION]... [FILE]..."
+			echo "batch converts .wdf files to .txt format, stores all files in a single output directory"
+			echo "Arguments:"
+			echo "	-f		Filters out files that do not end in .wdf"
+			echo "Author: Justin He"
+			exit 0
+			;;
+		*)
+			echo "Invalid option provided"
+			exit 1
+			;;
+	esac 
+done
+shift "$((OPTIND-1))"
+
+
+# If no files provided, exit
+if [ $# -eq 0 ];
+then
+	echo "No files provided"
+	exit 1
+fi
+
+# Find first valid directory name
+LSOUT="$(ls -ld * | grep -E "wdfout-[0-9]+")"
+n=0
+while [ $(echo $LSOUT | grep "wdfout-$n" | wc -l) -gt 0 ]
+do
+	((n++))
+done
+
+dir="./wdfout-$n"
+mkdir $dir
+
+# Parse files and convert each one from wdf to txt
+# TODO: Determine whether to stop and delete at invalid file or continue parsing
+echo "Converting..."
+i=0
+for file in "$@"
+do
+	if [ "$filter" = false ] || [ "$( echo $file | grep ".wdf$" | wc -l )" -gt 0 ];
+	then
+		((i++))
+		echo -e "$i\t$file"
+		FILENAME="$(echo $file | sed -n "s/^\(.*\)\.wdf$/\1/p").txt"
+		WDFOUT="$(wdf-export -f '.txt' -p '%.6f' -o "$dir/$FILENAME" $file 2>&1 >/dev/null)" 
+		if [ $? -ne 0 ];
+		then
+			((i--))
+			rm -r $dir
+			echo "$WDFOUT"
+			exit 1
+		fi
+	fi
+	
+done 
+
+echo "Converted $i files."
+exit 0

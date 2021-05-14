@@ -3,7 +3,7 @@
 usage="$(basename "$0") [OPTION]... [FILE]...
 Batch converts .wdf files to .txt format, then stores all files in a single output directory
 Wrapper around wdf-export utility from renishawWiRE
-arguments:
+Arguments:
 	-h
 		show this help message and exit
 	-f

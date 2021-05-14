@@ -2,7 +2,7 @@
 
 filter=false
 # Parse arguments
-while getopts ":f:h" opt; do
+while getopts "fh" opt; do
 	case $opt in
 		f)
 			filter=true

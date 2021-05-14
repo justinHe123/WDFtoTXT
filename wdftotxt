@@ -32,14 +32,14 @@ then
 fi
 
 # Find first valid directory name
-LSOUT="$(ls -ld * | grep -E "wdfout-[0-9]+")"
+LSOUT="$(ls -ld * | grep -E "wdfout[0-9]+")"
 n=0
-while [ $(echo $LSOUT | grep "wdfout-$n" | wc -l) -gt 0 ]
+while [ $(echo $LSOUT | grep "wdfout$n" | wc -l) -gt 0 ]
 do
 	((n++))
 done
 
-dir="./wdfout-$n"
+dir="./wdfout$n"
 mkdir $dir
 
 # Parse files and convert each one from wdf to txt

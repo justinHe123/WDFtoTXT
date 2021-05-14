@@ -1,22 +1,34 @@
 #!/bin/sh
 
-filter=false
+usage="$(basename "$0") [OPTION]... [FILE]...
+Batch converts .wdf files to .txt format, then stores all files in a single output directory
+Wrapper around wdf-export utility from renishawWiRE
+arguments:
+	-h
+		show this help message and exit
+	-f
+		filters out files that do not end in .wdf
+	-d DIR
+		changes the destination output directory to DIR
+
+Author: Justin He"
+ 
 # Parse arguments
-while getopts ":f:h" opt; do
+filter=false
+dir=""
+while getopts "fhd:" opt; do
 	case $opt in
 		f)
 			filter=true
 			;;
 		h)
-			echo "usage: dftotxt [OPTION]... [FILE]..."
-			echo "batch converts .wdf files to .txt format, stores all files in a single output directory"
-			echo "Arguments:"
-			echo "	-f		Filters out files that do not end in .wdf"
-			echo "Author: Justin He"
+			echo "$usage"
 			exit 0
 			;;
-		*)
-			echo "Invalid option provided"
+		d)
+			dir="$OPTARG"
+			;;
+		\?)
 			exit 1
 			;;
 	esac 
@@ -31,15 +43,18 @@ then
 	exit 1
 fi
 
-# Find first valid directory name
-LSOUT="$(ls -ld * | grep -E "wdfout-[0-9]+")"
-n=0
-while [ $(echo $LSOUT | grep "wdfout-$n" | wc -l) -gt 0 ]
-do
-	((n++))
-done
+# Find first valid directory name if dir not specified
+if [ "$dir" = "" ];
+then
+	LSOUT="$(ls -ld * | grep -E "wdfout[0-9]+")"
+	n=0
+	while [ $(echo $LSOUT | grep "wdfout$n" | wc -l) -gt 0 ]
+	do
+		((n++))
+	done
 
-dir="./wdfout-$n"
+	dir="./wdfout$n"
+fi
 mkdir $dir
 
 # Parse files and convert each one from wdf to txt

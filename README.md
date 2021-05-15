@@ -57,44 +57,44 @@ Arguments:
 
         -h
 
-                show this help message and exit
+show this help message and exit
 
         -f
 
-                filters out files that do not end in .wdf
+filters out files that do not end in .wdf
 
         -o DIR
 
-                changes the output directory to DIR
+changes the output directory to DIR
 
         -r
 
-                recursively convert files of any input directories
+recursively convert files of any input directories
 
-Example:
-
-
-
-wdftotxt *
-
-	Converts all files in the current directory to txt format
+Examples:
 
 
 
-wdftotxt -f *
+	wdftotxt *
 
-	Converts only files ending in .wdf 
-
-
-
-wdftotxt -o outdir *
-
-	Sets the output directory to outdir
+Converts all files in the current directory to txt format
 
 
 
-wdftotxt -r *
+	wdftotxt -f *
 
-	Recursively enters any directories and converts files within them
+Converts only files ending in .wdf 
+
+
+
+	wdftotxt -o outdir *
+
+Sets the output directory to outdir
+
+
+
+	wdftotxt -r *
+
+Recursively enters any directories and converts files within them
 
 	

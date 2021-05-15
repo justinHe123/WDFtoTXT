@@ -1,8 +1,9 @@
 # WDFtoTXT
-Batch convert wdf files to txt for Raman spectroscopy analysis.
-This script is a wrapper around the wdf-export util provided by renishawWiRE.
+Batch convert wdf files to txt for Raman spectroscopy analysis
 
-Required: Python 3.6 or above and pip
+This script is a wrapper around the wdf-export util from renishawWiRE creared by alchem0x2A
+
+Required: Python 3.6 or above, pip3
 
 # Setup
 All commands are assumed to be ran in the project's root directory.

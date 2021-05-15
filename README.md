@@ -47,7 +47,7 @@ NOTE: Be careful when doing these
 
 # Usage
 
-wdftotxt [OPTION]... [FILE]...
+	wdftotxt [OPTION]... [FILE]...
 
 Batch converts .wdf files to .txt format, then stores all files in a single output directory
 

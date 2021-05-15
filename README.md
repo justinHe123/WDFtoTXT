@@ -30,10 +30,29 @@ NOTE: Be careful when doing these
 wdftotxt [OPTION]... [FILE]...
 Batch converts .wdf files to .txt format, then stores all files in a single output directory
 Wrapper around wdf-export utility from renishawWiRE
-Options:
+Arguments:
         -h
                 show this help message and exit
         -f
                 filters out files that do not end in .wdf
-        -d DIR
-                changes the destination output directory to DIR
+        -o DIR
+                changes the output directory to DIR
+        -r
+                recursively convert files of any input directories
+Example:
+
+wdftotxt *
+	Converts all files in the current directory to txt format
+
+wdftotxt -f *
+	Converts only files ending in .wdf 
+
+wdftotxt -o outdir *
+	Sets the output directory to outdir
+
+wdftotxt -r *
+	Recursively enters any directories and converts files within them
+
+
+
+	

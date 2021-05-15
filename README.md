@@ -3,9 +3,17 @@ Batch convert wdf files to txt for Raman spectroscopy analysis
 
 This script is a wrapper around the wdf-export util from renishawWiRE by alchem0x2A
 
-Required: Python 3.6 or above, pip3
+# Installation
+
+Clone this repository, then change into the locally created directory for setup.
+
+	git clone https://github.com/justinHe123/WDFtoTXT.git
+	
+	cd WDFtoTXT
 
 # Setup
+Required: Python 3.6 or above, pip3
+
 All commands are assumed to be ran in the project's root directory.
 
 Optional: Do configuration in a virtual environment

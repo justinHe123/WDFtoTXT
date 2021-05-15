@@ -58,7 +58,9 @@ NOTE: Be careful when doing these
 
 	wdftotxt [OPTION]... [FILE]...
 
-Batch converts .wdf files to .txt format, then stores all files in a single output directory
+Batch converts .wdf files to .txt format, then stores all files in a single output directory. Outp
+ut files will retain the directory hierarchy of input files.
+
 
 Wrapper around wdf-export utility from renishawWiRE
 

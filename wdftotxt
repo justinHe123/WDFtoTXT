@@ -8,15 +8,18 @@ Arguments:
 		show this help message and exit
 	-f
 		filters out files that do not end in .wdf
-	-d DIR
-		changes the destination output directory to DIR
+	-o DIR
+		changes the output directory to DIR
+	-r
+		recursively convert files of any input directories 
 
 Author: Justin He"
  
 # Parse arguments
 filter=false
-dir=""
-while getopts "fhd:" opt; do
+outdir=""
+recur=false
+while getopts "fho:r" opt; do
 	case $opt in
 		f)
 			filter=true
@@ -25,8 +28,12 @@ while getopts "fhd:" opt; do
 			echo "$usage"
 			exit 0
 			;;
-		d)
-			dir="$OPTARG"
+		o)
+			echo $OPTARG
+			outdir="$OPTARG"
+			;;
+		r)
+			recur=true
 			;;
 		\?)
 			exit 1
@@ -44,7 +51,7 @@ then
 fi
 
 # Find first valid directory name if dir not specified
-if [ "$dir" = "" ];
+if [ "$outdir" = "" ];
 then
 	LSOUT="$(ls -ld * | grep -E "wdfout[0-9]+")"
 	n=0
@@ -53,28 +60,56 @@ then
 		((n++))
 	done
 
-	dir="./wdfout$n"
+	outdir="./wdfout$n"
 fi
-mkdir $dir
+
+# Define function for recursion
+recursive_convert()
+{
+	local dir="$1"
+	input="$(ls $dir)"
+	for file in $input
+	do
+		if [ -d "$dir/$file" ];
+		then
+			echo "$dir/$file is a directory"
+			recursive_convert "$dir/$file"
+		elif [ "$filter" = false ] || [ "$( echo $file | grep ".wdf$" | wc -l )" -gt 0 ];
+		then
+			((i++))
+			echo -e "$i\t$dir/$file"
+			FILENAME="$(echo $file | sed -n "s/^\(.*\)\.wdf$/\1/p").txt"
+			WDFOUT="$(wdf-export -f '.txt' -p '%.6f' -o "$outdir/$dir/$FILENAME" $dir/$file 2>&1 >/dev/null)" 
+			if [ $? -ne 0 ];
+			then
+				((i--))
+				echo "$WDFOUT"
+			fi
+		fi
+		
+	done;
+}
 
 # Parse files and convert each one from wdf to txt
-# TODO: Determine whether to stop and delete at invalid file or continue parsing
 echo "Converting..."
 i=0
 for file in "$@"
 do
-	if [ "$filter" = false ] || [ "$( echo $file | grep ".wdf$" | wc -l )" -gt 0 ];
+	if [ "$recur" = true ] && [ -d "$file" ];
+	then
+		echo "$file is a directory"
+		recursive_convert "$file"
+	elif [ "$filter" = false ] || [ "$( echo $file | grep ".wdf$" | wc -l )" -gt 0 ];
 	then
 		((i++))
 		echo -e "$i\t$file"
 		FILENAME="$(echo $file | sed -n "s/^\(.*\)\.wdf$/\1/p").txt"
-		WDFOUT="$(wdf-export -f '.txt' -p '%.6f' -o "$dir/$FILENAME" $file 2>&1 >/dev/null)" 
+		WDFOUT="$(wdf-export -f '.txt' -p '%.6f' -o "$outdir/$FILENAME" $file 2>&1 >/dev/null)" 
 		if [ $? -ne 0 ];
 		then
 			((i--))
-			rm -r $dir
 			echo "$WDFOUT"
-			exit 1
+			# exit 1
 		fi
 	fi
 	

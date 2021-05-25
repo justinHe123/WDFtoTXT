@@ -12,7 +12,7 @@ Arguments:
 	-r
 		recursively convert files of any input directories 
 	-u
-		output will be unhierarchical, or will not retain the hierarchy of input fi,es
+		output will be unhierarchical i.e. will not retain the hierarchy of input files
 
 Author: Justin He"
  

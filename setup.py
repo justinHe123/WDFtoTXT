@@ -6,7 +6,7 @@ def readme():
 
 setup(name='wdftotxt',
       version='0.1',
-      description='Extract data from wdf files and format in txt files',
+      description='Extract data from wdf files into txt files',
       long_description=readme(),
       url='https://github.com/justinHe123/WDFtoTXT',
       author='Justin He',

@@ -26,33 +26,16 @@ Optional: Do configuration in a virtual environment
 
 
 
-To install dependencies, run the following command.
+To install the script, use pip.
 
-	pip3 install requirements.txt
+	pip3 install .
 
 
-If running into issues with wheels, run the following commands instead.
+If running into issues with wheels, run the following commands before running the command above..
 
 	pip3 install cython pybind11
 
 	pip3 install --no-binary :all: --no-use-pep517 numpy
-
-	pip3 install renishawWiRE
-
-
-
-If you want to run wdftotxt from anywhere in your system, you can do one of the following:
-
-NOTE: Be careful when doing these
-
-	1. Move wdftotxt to a directory in your PATH (recommended: /usr/local/bin, atleast on mac)
-
-	2. Add the directory of wdftotxt to your PATH
-
-	3. (If using a virtual environment) Copy wdftotxt to your environment's bin folder
-
-		cp wdftotxt ENVIR_NAME/bin/wdftotxt
-
 
 # Usage
 

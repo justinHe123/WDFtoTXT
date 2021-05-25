@@ -1,9 +1,0 @@
-# Uncomment if running into issues with wheels
-# Cython==0.29.23
-# pybind11==2.6.2
-
-# If issues with wheels, install the above 2 libraries then run
-# pip3 install --no-binary :all: --no-use-pep517 numpy
-# numpy==1.20.3
-
-renishawWiRE==0.1.15

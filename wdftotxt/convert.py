@@ -30,19 +30,23 @@ def main():
     args = parser.parse_args()
 
     ### Further argument parsing ###
-    # Strip any trailing extensions from path name
-    no_extension = args.file.split('.')[0]
     # Strip any leading directories from path
-    no_directories = no_extension.split('/')[-1]
+    dir_split = args.file.split('/')
+    no_dir = dir_split[-1]
+    # Strip any trailing extension from file
+    stripped = no_dir.split('.')[0]
 
     # Set base name to stripped file name, if not specified
     if args.base is None:
-        args.base = no_directories
+        args.base = stripped
 
     # Set to output directory to stripped file name + "_txt", if not specified
-    # If keep_path specified, retains any leading directories
+    # If keep_path specified, will not strip leading directories
+    if args.keep_path:
+        dir_split[-1] = ''
+        stripped = '/'.join(dir_split) + stripped
     if args.output is None:
-        args.output = (no_extension if args.keep_path else no_directories) + "_txt"
+        args.output = stripped + "_txt"
 
     # If parent directory specified, make sure to append '/' for proper traversal
     # Otherwise, leave blank as to not disrupt relative/absolute pathing

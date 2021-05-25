@@ -1,7 +1,7 @@
 # WDFtoTXT
 Batch convert wdf files to txt for Raman spectroscopy analysis
 
-This script is a wrapper around the wdf-export util from renishawWiRE by alchem0x2A
+This script utilizes the renishawWiRE package by alchem0x2A
 
 # Installation
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3.6
 from renishawWiRE import WDFReader
 from argparse import ArgumentParser
-import re
 from pathlib import Path
+import re
 
 def main():
     usage_msg = """%(prog)s - convert a wdf file to txt
@@ -65,6 +65,8 @@ def main():
     # Parse reader
     spectra_length = len(reader.spectra)
     row, col = 0, 0
+    spectra = reader.spectra.flatten()
+    start = 0
     # Order of iteration:
     # iterate x and y simultaneously
     # iterate xdata and spectra simultaneously
@@ -72,13 +74,9 @@ def main():
     for i in range(reader.capacity):
         x = reader.xpos[i]
         y = reader.ypos[i]      
-        spectra = reader.spectra[row][col]
         # Create file and write line by line
-        with open(f'{directory}/{args.base}__X_{x.round(4)}__Y_{y.round(4)}).txt', 'w') as file:
-            for j in reversed(range(reader.point_per_spectrum)):
+        with open(f'{directory}/{args.base}__X_{x.round(4)}__Y_{y.round(4)}.txt', 'w') as file:
+            for j in range(reader.point_per_spectrum):
                 # Format: wavenumber    spectra value
-                file.write(f'{reader.xdata[j]}\t{spectra[j]}\n')
-        # Determine row, col from i  
-        row += 1
-        if row == spectra_length:
-            row, col = 0, col + 1
+                file.write(f'{reader.xdata[j]}\t{spectra[start + j]}\n')
+        start += reader.point_per_spectrum

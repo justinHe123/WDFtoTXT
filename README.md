@@ -48,23 +48,23 @@ This script utilizes the renishawWiRE package by alchem0x2A
 
 Arguments:
 
-        -h
+    -h
 
 show this help message and exit
 
-        -f
+    -f
 
 filters out files that do not end in .wdf
 
-        -o DIR
+    -o DIR
 
 changes the output directory to DIR
 
-        -r
+    -r
 
 recursively convert files of any input directories
 
-		-u
+	-u
 
 output will be unhierarchical i.e. will not retain the hierarchy of input files
 

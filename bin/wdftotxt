@@ -11,6 +11,8 @@ Arguments:
 		changes the output directory to DIR
 	-r
 		recursively convert files of any input directories 
+	-u
+		output will be unhierarchical, or will not retain the hierarchy of input fi,es
 
 Author: Justin He"
  
@@ -18,7 +20,8 @@ Author: Justin He"
 filter=false
 outdir=""
 recur=false
-while getopts "fho:r" opt; do
+hier=true
+while getopts "fho:ru" opt; do
 	case $opt in
 		f)
 			filter=true
@@ -33,6 +36,9 @@ while getopts "fho:r" opt; do
 			;;
 		r)
 			recur=true
+			;;
+		u)
+			hier=false
 			;;
 		\?)
 			exit 1
@@ -67,6 +73,13 @@ recursive_convert()
 {
 	local dir="$1"
 	input="$(ls $dir)"
+	if [ "$hier" = true ];
+	then
+		local parentdir="$outdir/$dir"
+	else
+		local parentdir="$outdir"
+	fi
+
 	for file in $input
 	do
 		if [ -d "$dir/$file" ];
@@ -75,8 +88,8 @@ recursive_convert()
 		elif [ "$filter" = false ] || [ "$( echo $file | grep ".wdf$" | wc -l )" -gt 0 ];
 		then
 			((i++))
-			echo -e "$i\t$dir/$file"
-			WDFOUT="$(wdfconvert -p $outdir/$dir $dir/$file 2>&1 >/dev/null)" 
+			echo "$i\t$dir/$file"
+			WDFOUT="$(wdfconvert -p $parentdir $dir/$file 2>&1 >/dev/null)" 
 			if [ $? -ne 0 ];
 			then
 				((i--))
@@ -98,7 +111,7 @@ do
 	elif [ "$filter" = false ] || [ "$( echo $file | grep ".wdf$" | wc -l )" -gt 0 ];
 	then
 		((i++))
-		echo -e "$i\t$file"
+		echo "$i\t$file"
 		WDFOUT="$(wdfconvert -p $outdir $file 2>&1 >/dev/null)" 
 		if [ $? -ne 0 ];
 		then

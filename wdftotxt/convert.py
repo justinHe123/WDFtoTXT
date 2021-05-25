@@ -98,7 +98,7 @@ def main():
             with open(filename, 'w') as file:
                 for j in range(reader.point_per_spectrum):
                     # Format: wavenumber    spectra value
-                    file.write(f'{reader.xdata[j]}\t{spectra[start + j]}\n')
+                    file.write(f'{reader.xdata[j]:.6f}\t{spectra[start + j]:.6f}\n')
             start += reader.point_per_spectrum
         exit(0)
     except Exception as e:

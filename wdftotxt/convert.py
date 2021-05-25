@@ -3,6 +3,7 @@ from renishawWiRE import WDFReader
 from argparse import ArgumentParser
 from pathlib import Path
 import re
+import sys
 
 def main():
     usage_msg = """%(prog)s - convert a wdf file to txt
@@ -55,28 +56,51 @@ def main():
     else:
         args.parent += '/'
 
-    directory = f'{args.parent}{args.output}'
+    dirname = f'{args.parent}{args.output}'
 
-    # Initialize reader
-    reader = WDFReader(args.file)
-    # Create output directory
-    Path(directory).mkdir(parents=True, exist_ok=not args.no_duplicate)
+    try:
+        if not Path(args.file).is_file():
+            # Error: invalid input file
+            raise Exception(f'invalid input file: {args.file}')
 
-    # Parse reader
-    spectra_length = len(reader.spectra)
-    row, col = 0, 0
-    spectra = reader.spectra.flatten()
-    start = 0
-    # Order of iteration:
-    # iterate x and y simultaneously
-    # iterate xdata and spectra simultaneously
-    # spectra[i][j] where i increments ++, and j increments when i = len
-    for i in range(reader.capacity):
-        x = reader.xpos[i]
-        y = reader.ypos[i]      
-        # Create file and write line by line
-        with open(f'{directory}/{args.base}__X_{x.round(4)}__Y_{y.round(4)}.txt', 'w') as file:
-            for j in range(reader.point_per_spectrum):
-                # Format: wavenumber    spectra value
-                file.write(f'{reader.xdata[j]}\t{spectra[start + j]}\n')
-        start += reader.point_per_spectrum
+        # Initialize reader
+        try:
+            reader = WDFReader(args.file)
+        except Exception as e:
+            # Error: cannot read file
+            raise Exception(f'cannot read file: {args.file}')
+
+        # Create output directory
+        directory = Path(dirname)
+        if directory.exists() and not directory.is_dir():
+            # Error: existing path is a file
+            raise Exception(f'output directory is already a file: {dirname}')
+        if directory.exists() and args.no_duplicate:
+            # Error: duplicate directory
+            raise Exception(f'directory already exists: {dirname}')
+
+        directory.mkdir(parents=True, exist_ok=not args.no_duplicate)
+
+        # Parse reader
+        spectra_length = len(reader.spectra)
+        row, col = 0, 0
+        spectra = reader.spectra.flatten()
+        start = 0
+        # Order of iteration:
+        # iterate x and y simultaneously
+        # iterate xdata and spectra simultaneously
+        # spectra[i][j] where i increments ++, and j increments when i = len
+        for i in range(reader.capacity):
+            x = reader.xpos[i]
+            y = reader.ypos[i]      
+            # Create file and write line by line
+            filename = f'{dirname}/{args.base}__X_{x.round(4)}__Y_{y.round(4)}.txt'
+            with open(filename, 'w') as file:
+                for j in range(reader.point_per_spectrum):
+                    # Format: wavenumber    spectra value
+                    file.write(f'{reader.xdata[j]}\t{spectra[start + j]}\n')
+            start += reader.point_per_spectrum
+        exit(0)
+    except Exception as e:
+        print(e, file=sys.stderr)
+        exit(1)

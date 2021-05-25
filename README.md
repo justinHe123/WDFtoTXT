@@ -120,12 +120,12 @@ would have an output with the following hierarchy
 	|
 	(dir) a
 	|\
-	| (dir)file1_txt
+	| (dir) file1_txt
 	|  \
 	|   ...
 	(dir) b
 	|\
-	| file2_txt
+	| (dir) file2_txt
 	|  \
 	|   ...
 	*	
@@ -138,10 +138,10 @@ would have an output with the following hierarchy
 
 	wdfout
 	|
-	file1_txt
+	(dir) file1_txt
 	|\
 	| ...
-	file2_txt
+	(dir) file2_txt
 	|\
 	| ...
 	*	

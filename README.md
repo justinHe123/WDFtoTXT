@@ -41,11 +41,10 @@ If running into issues with wheels, run the following commands before running th
 
 	wdftotxt [OPTION]... [FILE]...
 
-Batch converts .wdf files to .txt format, then stores all files in a single output directory. Outp
-ut files will retain the directory hierarchy of input files.
+Batch converts .wdf files to .txt format, then stores all files in a single output directory. Output files will retain the directory hierarchy of input files.
 
 
-Wrapper around wdf-export utility from renishawWiRE
+This script utilizes the renishawWiRE package by alchem0x2A
 
 Arguments:
 
@@ -64,6 +63,10 @@ changes the output directory to DIR
         -r
 
 recursively convert files of any input directories
+
+		-u
+
+output will be unhierarchical i.e. will not retain the hierarchy of input files
 
 Examples:
 
@@ -87,8 +90,60 @@ Sets the output directory to outdir
 
 
 
-	wdftotxt -r *
+	wdftotxt -r .
 
 Recursively enters any directories and converts files within them
+
+
+	wdftotxt -u *
+
+Removes any hierarchical information of input files. For example, suppose the filesystem is
+
+	.
+	|
+	(dir) a
+	|\
+	| file1.wdf
+	|
+	(dir) b
+	|\
+	| file2.wdf
+	*	
+
+The command
+
+	wdftotxt a/file1.wdf b/file2.wdf
+
+would have an output with the following hierarchy
+
+	wdfout
+	|
+	(dir) a
+	|\
+	| (dir)file1_txt
+	|  \
+	|   ...
+	(dir) b
+	|\
+	| file2_txt
+	|  \
+	|   ...
+	*	
+
+while the command
+
+	wdftotxt -u a/file1.wdf b/file2.wdf
+
+would have an output with the following hierarchy
+
+	wdfout
+	|
+	file1_txt
+	|\
+	| ...
+	file2_txt
+	|\
+	| ...
+	*	
 
 	
